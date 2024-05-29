@@ -1,11 +1,19 @@
-import ReactFlow, { Background, ControlButton, Controls, useReactFlow } from "reactflow";
+import ReactFlow, {
+	Background,
+	ControlButton,
+	Controls,
+	getRectOfNodes,
+	getTransformForBounds,
+	useReactFlow,
+} from "reactflow";
 
 import "reactflow/dist/style.css";
 
 import { ChitraProps } from "./types";
 
-import { MaximizeIcon, MinusIcon, PlusIcon } from "lucide-react";
-import { proOptions } from "./constants";
+import { ArrowDownToLineIcon, HardDriveDownloadIcon, MaximizeIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { imageHeight, imageWidth, proOptions } from "./constants";
+import { toPng } from "html-to-image";
 
 export type FitViewOptions = {
 	padding: number;
@@ -18,7 +26,33 @@ const fitViewOptions: FitViewOptions = {
 };
 
 const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes }: ChitraProps) => {
-	const { zoomIn, zoomOut, fitView } = useReactFlow();
+	const { zoomIn, zoomOut, fitView, getNodes } = useReactFlow();
+
+	function downloadImage(dataUrl: string) {
+		const a = document.createElement("a");
+
+		a.setAttribute("download", "chitra.png");
+		a.setAttribute("href", dataUrl);
+		a.click();
+	}
+
+	const onDownloadClick = () => {
+		const nodesBounds = getRectOfNodes(getNodes());
+		const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+
+		const viewport: HTMLElement = document.querySelector(".react-flow__viewport")!;
+
+		toPng(viewport, {
+			backgroundColor: "#333",
+			width: imageWidth,
+			height: imageHeight,
+			style: {
+				width: imageWidth.toString(),
+				height: imageHeight.toString(),
+				transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+			},
+		}).then(downloadImage);
+	};
 
 	return (
 		<div className="w-full h-full border rounded-lg mt-2">
@@ -34,6 +68,7 @@ const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTyp
 			>
 				<Background gap={15} className="bg-background" color="#555" />
 				<Controls
+					position="bottom-right"
 					showZoom={false}
 					showFitView={false}
 					showInteractive={false}
@@ -53,6 +88,9 @@ const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTyp
 					</ControlButton>
 					<ControlButton onClick={() => fitView({ duration: 500 })}>
 						<MaximizeIcon />
+					</ControlButton>
+					<ControlButton onClick={onDownloadClick}>
+						<ArrowDownToLineIcon />
 					</ControlButton>
 				</Controls>
 			</ReactFlow>

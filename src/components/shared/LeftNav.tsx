@@ -6,6 +6,9 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "../ui/separator";
+import { CirclePlusIcon, SquarePlusIcon } from "lucide-react";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 	const nodes = useNodes();
@@ -72,6 +75,29 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 		);
 	};
 
+	const addNewEntity = () => {
+		const newNode = {
+			id: "",
+			position: { x: 0, y: 0 },
+			data: {
+				entityName: "",
+				attributes: [{ name: "id", type: "int", constraint: "PK" }],
+			},
+			type: "entity",
+		};
+
+		setNodes((nds) => {
+			newNode.id = `${nds.length + 1}`;
+			newNode.data.entityName = `Entity ${nds.length + 1}`;
+
+			return nds.concat(newNode);
+		});
+
+		toast("New Entity has been created", {
+			description: "Start defining the attributes",
+		});
+	};
+
 	const updateAttributeConstraint = (id: number, value: string) => {
 		setNodes((nds) =>
 			nds.map((node: Node) => {
@@ -90,14 +116,56 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 		);
 	};
 
+	const addNewAttribute = () => {
+		setNodes((nds) =>
+			nds.map((node) => {
+				if (node.id === selectedEntity?.id) {
+					node.data = {
+						...node.data,
+						attributes: [...node.data.attributes, { name: "attr", type: "int", constraint: "-" }],
+					};
+				}
+				return node;
+			})
+		);
+	};
+
 	return (
 		<form id="entityForm">
 			<div className="grid w-full items-start gap-6">
+				<fieldset className="grid grid-cols-2 gap-6 rounded-lg border p-4">
+					<legend className="-ml-1 px-1 text-sm font-medium">Controls</legend>
+					<div className="grid gap-3 w-max mx-auto">
+						<Button
+							onClick={() => {
+								addNewEntity();
+							}}
+							variant="outline"
+							size="sm"
+							className="gap-1.5 flex"
+						>
+							<SquarePlusIcon className="size-5" />
+							New Entity
+						</Button>
+					</div>
+					<div className="grid gap-3 w-max mx-auto">
+						<Button
+							onClick={() => {
+								addNewAttribute();
+							}}
+							variant="outline"
+							size="sm"
+							className="gap-1.5"
+						>
+							<CirclePlusIcon className="size-5" />
+							Add Attribute
+						</Button>
+					</div>
+				</fieldset>
 				<fieldset className="grid gap-6 rounded-lg border p-4">
 					<legend className="-ml-1 px-1 text-sm font-medium">Entities</legend>
 					<div className="grid gap-3">
 						<Label htmlFor="entityName">Entity Name</Label>
-
 						<Input
 							onChange={(e) => {
 								updateEntityName(e.target.value);

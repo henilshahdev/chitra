@@ -1,15 +1,12 @@
-import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
+import { useReactFlow } from "reactflow";
 import { TopNavProps } from "@/types";
 
-import { toPng } from "html-to-image";
-
 import { Button } from "../ui/button";
-import { toast } from "sonner";
 
 import { Theme } from "./Theme";
+import { useTheme } from "next-themes";
 
-import { CirclePlusIcon, HandMetalIcon, HardDriveDownloadIcon, InfoIcon, SquarePlusIcon } from "lucide-react";
-import { imageHeight, imageWidth } from "@/constants";
+import { HandMetalIcon, InfoIcon } from "lucide-react";
 
 import {
 	Dialog,
@@ -22,115 +19,22 @@ import {
 
 const TopNav = ({ selectedEntity }: TopNavProps) => {
 	const { setNodes } = useReactFlow();
-
-	const addNewEntity = () => {
-		const newNode = {
-			id: "",
-			position: { x: 0, y: 0 },
-			data: {
-				entityName: "",
-				attributes: [{ name: "id", type: "int", constraint: "PK" }],
-			},
-			type: "entity",
-		};
-
-		setNodes((nds) => {
-			newNode.id = `${nds.length + 1}`;
-			newNode.data.entityName = `Entity ${nds.length + 1}`;
-
-			return nds.concat(newNode);
-		});
-
-		toast("New Entity has been created", {
-			description: "Start defining the attributes",
-		});
-	};
-
-	const addNewAttribute = () => {
-		setNodes((nds) =>
-			nds.map((node) => {
-				if (node.id === selectedEntity?.id) {
-					node.data = {
-						...node.data,
-						attributes: [...node.data.attributes, { name: "attr", type: "int", constraint: "-" }],
-					};
-				}
-				return node;
-			})
-		);
-	};
-
-	function downloadImage(dataUrl: string) {
-		const a = document.createElement("a");
-
-		a.setAttribute("download", "reactflow.png");
-		a.setAttribute("href", dataUrl);
-		a.click();
-	}
-
-	const { getNodes } = useReactFlow();
-
-	const onDownloadClick = () => {
-		const nodesBounds = getRectOfNodes(getNodes());
-		const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
-
-		const viewport: HTMLElement = document.querySelector(".react-flow__viewport")!;
-
-		toPng(viewport, {
-			backgroundColor: "#333",
-			width: imageWidth,
-			height: imageHeight,
-			style: {
-				width: imageWidth.toString(),
-				height: imageHeight.toString(),
-				transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-			},
-		}).then(downloadImage);
-	};
+	const { theme } = useTheme();
 
 	return (
 		<header className="w-full flex justify-between h-[57px] items-center gap-1 border-b bg-background px-4">
 			<div className="flex justify-start items-center space-x-3">
-				<Button asChild variant="ghost" size="icon" aria-label="Logo">
-					<img src="/logo.svg" alt="Chitra Logo" width={28} height={28} />
+				<Button asChild variant="ghost" size="icon" aria-label="Logo" className="p-1">
+					<img src="/logo.svg" alt="Chitra Logo" />
 				</Button>
 				<h1 className="text-xl font-semibold">Chitra</h1>
 			</div>
-			<div className="w-full flex justify-center items-center space-x-4">
-				<Button
-					onClick={() => {
-						addNewEntity();
-					}}
-					variant="outline"
-					size="sm"
-					className="gap-1.5 text-sm"
-				>
-					<SquarePlusIcon className="size-4" />
-					New Entity
-				</Button>
-				<Button
-					onClick={() => {
-						addNewAttribute();
-					}}
-					variant="outline"
-					size="sm"
-					className="gap-1.5 text-sm"
-				>
-					<CirclePlusIcon className="size-4" />
-					Add Attribute
-				</Button>
-				<Button onClick={onDownloadClick} variant="outline" size="sm" className="gap-1.5 text-sm">
-					<HardDriveDownloadIcon className="size-4" />
-					Download
-				</Button>
-			</div>
 			<div className="w-max flex justify-center items-center space-x-4">
 				<Theme />
-
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button variant="outline" size="sm" className="gap-1.5 text-sm">
-							<InfoIcon className="size-4" />
+						<Button variant="outline" size="sm" className="gap-1.5">
+							<InfoIcon className="size-5" />
 							About
 						</Button>
 					</DialogTrigger>
@@ -166,6 +70,23 @@ const TopNav = ({ selectedEntity }: TopNavProps) => {
 										henil.601@gmail.com
 									</a>
 								</p>
+
+								<Button
+									onClick={() => {
+										window.open("https://ui.shadcn.com/docs/components/button", "_blank").focus();
+									}}
+									variant="link"
+									size="sm"
+									className="mt-6 flex justify-start items-center space-x-3"
+								>
+									<img
+										src={theme === "light" ? "/discord.svg" : "/discord_white.png"}
+										alt="Discord Icon"
+										width={20}
+										height={20}
+									/>
+									<p>Join Discord</p>
+								</Button>
 							</DialogDescription>
 						</DialogHeader>
 					</DialogContent>
