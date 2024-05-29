@@ -137,7 +137,8 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 					<legend className="-ml-1 px-1 text-sm font-medium">Controls</legend>
 					<div className="grid gap-3 w-max mx-auto">
 						<Button
-							onClick={() => {
+							onClick={(e) => {
+								e.preventDefault();
 								addNewEntity();
 							}}
 							variant="outline"
@@ -150,7 +151,8 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 					</div>
 					<div className="grid gap-3 w-max mx-auto">
 						<Button
-							onClick={() => {
+							onClick={(e) => {
+								e.preventDefault();
 								addNewAttribute();
 							}}
 							variant="outline"
