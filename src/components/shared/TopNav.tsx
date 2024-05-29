@@ -70,10 +70,9 @@ const TopNav = ({ selectedEntity }: TopNavProps) => {
 										henil.601@gmail.com
 									</a>
 								</p>
-
 								<Button
 									onClick={() => {
-										window.open("https://ui.shadcn.com/docs/components/button", "_blank").focus();
+										window.open("https://discord.gg/G6tmPFmG", "_blank").focus();
 									}}
 									variant="link"
 									size="sm"
