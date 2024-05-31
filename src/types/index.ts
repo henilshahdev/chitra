@@ -20,10 +20,6 @@ export type AppProps = {
 	setSelectedEntity: React.Dispatch<React.SetStateAction<EntityDataType | undefined>>;
 };
 
-export type TopNavProps = {
-	selectedEntity: EntityDataType | undefined;
-};
-
 export type EntityDataType = {
 	id: string;
 	data: {
@@ -36,4 +32,9 @@ export type EntityNodeProps = {
 	entityName: string;
 	attributes: AttributeType[];
 	selected: boolean;
+};
+
+export type ChitraControlsProps = {
+	addNewEntity: () => void;
+	addNewAttribute: () => void;
 };

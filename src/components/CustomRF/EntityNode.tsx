@@ -1,3 +1,5 @@
+import React from "react";
+
 import { NodeProps, Position } from "reactflow";
 import CustomHandle from "./CustomHandle";
 import { EntityNodeProps } from "@/types";

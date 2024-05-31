@@ -1,3 +1,5 @@
+import React from "react";
+
 import TopNav from "./components/shared/TopNav.tsx";
 import LeftNav from "./components/shared/LeftNav.tsx";
 import { MarkerType, ReactFlowProvider } from "reactflow";
@@ -11,6 +13,8 @@ import { useCallback, useState } from "react";
 
 import EntityNode from "./components/CustomRF/EntityNode";
 import { EntityDataType } from "./types/index.ts";
+import ChitraControls from "./components/shared/ChitraControls.tsx";
+import { toast } from "sonner";
 
 const nodeTypes = {
 	entity: EntityNode,
@@ -45,24 +49,67 @@ const App = () => {
 		[setEdges]
 	);
 
+	const addNewEntity = () => {
+		const newNode = {
+			id: "",
+			position: { x: 0, y: 0 },
+			data: {
+				entityName: "",
+				attributes: [{ name: "id", type: "int", constraint: "PK" }],
+			},
+			type: "entity",
+		};
+
+		setNodes((nds) => {
+			newNode.id = `${nds.length + 1}`;
+			newNode.data.entityName = `Entity ${nds.length + 1}`;
+
+			return nds.concat(newNode);
+		});
+
+		toast("New Entity has been created", {
+			description: "Start defining the attributes",
+		});
+	};
+
+	const addNewAttribute = () => {
+		setNodes((nds) =>
+			nds.map((node) => {
+				if (node.id === selectedEntity?.id) {
+					node.data = {
+						...node.data,
+						attributes: [...node.data.attributes, { name: "attr", type: "int", constraint: "-" }],
+					};
+				}
+				return node;
+			})
+		);
+	};
+
 	return (
 		<ReactFlowProvider>
 			<div className="grid h-screen w-full">
 				<div className="flex flex-col">
-					<TopNav selectedEntity={selectedEntity} />
-					<main className="flex-1 flex justify-between items-start space-x-4 overflow-auto p-4">
-						<div className="min-w-[450px] max-w-[450px]">
+					<TopNav selectedEntity={selectedEntity} setSelectedEntity={setSelectedEntity} />
+					<main className="flex-1 flex justify-between items-start lg:space-x-4 overflow-auto p-4">
+						<div className="hidden lg:grid lg:gap-6 min-w-[420px] max-w-[420px]">
+							<ChitraControls addNewEntity={addNewEntity} addNewAttribute={addNewAttribute} />
 							<LeftNav selectedEntity={selectedEntity} setSelectedEntity={setSelectedEntity} />
 						</div>
-						<div className="w-full h-[98%]">
-							<Chitra
-								nodes={nodes}
-								edges={edges}
-								onNodesChange={onNodesChange}
-								onEdgesChange={onEdgesChange}
-								onConnect={onConnect}
-								nodeTypes={nodeTypes}
-							/>
+						<div className="flex flex-col w-full h-[100%]">
+							<div className="md:hidden">
+								<ChitraControls addNewEntity={addNewEntity} addNewAttribute={addNewAttribute} />
+							</div>
+							<div className="flex flex-grow">
+								<Chitra
+									nodes={nodes}
+									edges={edges}
+									onNodesChange={onNodesChange}
+									onEdgesChange={onEdgesChange}
+									onConnect={onConnect}
+									nodeTypes={nodeTypes}
+								/>
+							</div>
 						</div>
 					</main>
 				</div>

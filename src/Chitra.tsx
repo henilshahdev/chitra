@@ -1,3 +1,5 @@
+import React from "react";
+
 import ReactFlow, {
 	Background,
 	ControlButton,
@@ -11,18 +13,20 @@ import "reactflow/dist/style.css";
 
 import { ChitraProps } from "./types";
 
-import { ArrowDownToLineIcon, HardDriveDownloadIcon, MaximizeIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { ArrowDownToLineIcon, MaximizeIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { imageHeight, imageWidth, proOptions } from "./constants";
 import { toPng } from "html-to-image";
 
 export type FitViewOptions = {
 	padding: number;
 	duration?: number;
+	minZoom: number;
 };
 
 const fitViewOptions: FitViewOptions = {
 	padding: 0,
 	duration: 500,
+	minZoom: 0,
 };
 
 const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes }: ChitraProps) => {
@@ -55,7 +59,7 @@ const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTyp
 	};
 
 	return (
-		<div className="w-full h-full border rounded-lg mt-2">
+		<div className="w-full h-full border rounded-lg">
 			<ReactFlow
 				proOptions={proOptions}
 				nodes={nodes}

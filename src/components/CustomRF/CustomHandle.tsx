@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Handle, HandleProps } from "reactflow";
 
 const CustomHandle = (props: HandleProps) => {
