@@ -84,18 +84,22 @@ const Chitra = ({ nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTyp
 						zoomOut({ duration: 500 });
 					}}
 				>
-					<ControlButton onClick={() => zoomIn({ duration: 500 })}>
-						<PlusIcon />
-					</ControlButton>
-					<ControlButton onClick={() => zoomOut({ duration: 500 })}>
-						<MinusIcon />
-					</ControlButton>
-					<ControlButton onClick={() => fitView({ duration: 500 })}>
-						<MaximizeIcon />
-					</ControlButton>
-					<ControlButton onClick={onDownloadClick}>
-						<ArrowDownToLineIcon />
-					</ControlButton>
+					<span className="fifth-step">
+						<ControlButton onClick={() => zoomIn({ duration: 500 })}>
+							<PlusIcon />
+						</ControlButton>
+						<ControlButton onClick={() => zoomOut({ duration: 500 })}>
+							<MinusIcon />
+						</ControlButton>
+						<ControlButton onClick={() => fitView({ duration: 500 })}>
+							<MaximizeIcon />
+						</ControlButton>
+					</span>
+					<span className="sixth-step">
+						<ControlButton onClick={onDownloadClick}>
+							<ArrowDownToLineIcon />
+						</ControlButton>
+					</span>
 				</Controls>
 			</ReactFlow>
 		</div>

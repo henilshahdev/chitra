@@ -6,8 +6,8 @@ import { ChitraControlsProps } from "@/types";
 
 const ChitraControls = ({ addNewEntity, addNewAttribute }: ChitraControlsProps) => {
 	return (
-		<div className="grid grid-cols-2 gap-6 px-4 pb-4">
-			<div className="grid gap-3 w-max mx-auto">
+		<span className="third-step">
+			<div className="flex justify-between items-center">
 				<Button
 					onClick={(e) => {
 						e.preventDefault();
@@ -20,8 +20,7 @@ const ChitraControls = ({ addNewEntity, addNewAttribute }: ChitraControlsProps) 
 					<SquarePlusIcon className="size-5" />
 					New Entity
 				</Button>
-			</div>
-			<div className="grid gap-3 w-max mx-auto">
+
 				<Button
 					onClick={(e) => {
 						e.preventDefault();
@@ -35,7 +34,7 @@ const ChitraControls = ({ addNewEntity, addNewAttribute }: ChitraControlsProps) 
 					Add Attribute
 				</Button>
 			</div>
-		</div>
+		</span>
 	);
 };
 
