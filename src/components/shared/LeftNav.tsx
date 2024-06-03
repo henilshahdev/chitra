@@ -116,14 +116,13 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 							/>
 						</div>
 					</fieldset>
-
-					<fieldset className="grid gap-3 rounded-lg border-0 lg:border p-4">
+					<fieldset className="grid gap-3 rounded-lg border-0 lg:border p-4 mt-6">
 						<legend className="hidden lg:block -ml-1 px-1 text-sm font-medium">Attributes</legend>
 						<Label className="text-start lg:hidden" htmlFor="entityName">
 							Attributes
 						</Label>
 						<div className="grid gap-x-3">
-							<ScrollArea className="w-full h-fit rounded-md border">
+							<ScrollArea className="w-full max-h-[400px] rounded-md border">
 								<div className="grid grid-cols-3 gap-x-4 items-center px-4 pt-4">
 									<p className="h-9 text-center font-medium text-muted-foreground text-sm">Column</p>
 									<p className="h-9 text-center font-medium text-muted-foreground text-sm">Type</p>
@@ -141,7 +140,7 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 								) : (
 									<></>
 								)}
-								<div className="px-4 pt-4">
+								<div className="px-4">
 									{nodes.map((node: Node) => {
 										if (node.selected) {
 											return node.data.attributes
