@@ -47,7 +47,7 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 						node.data = {
 							...node.data,
 							attributes: node.data.attributes.map((attribute: AttributeType, index: number) =>
-								index === id + 1 ? { ...attribute, name: value } : attribute
+								index === id ? { ...attribute, name: value } : attribute
 							),
 						};
 					}
@@ -65,7 +65,7 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 						node.data = {
 							...node.data,
 							attributes: node.data.attributes.map((attribute: AttributeType, index: number) =>
-								index === id + 1 ? { ...attribute, type: value } : attribute
+								index === id ? { ...attribute, type: value } : attribute
 							),
 						};
 					}
@@ -83,7 +83,7 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 						node.data = {
 							...node.data,
 							attributes: node.data.attributes.map((attribute: AttributeType, index: number) =>
-								index === id + 1 ? { ...attribute, constraint: value } : attribute
+								index === id ? { ...attribute, constraint: value } : attribute
 							),
 						};
 					}
