@@ -8,6 +8,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "../ui/separator";
+import { MousePointerClickIcon } from "lucide-react";
 
 const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 	const nodes = useNodes();
@@ -131,21 +132,11 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 									</p>
 								</div>
 								<Separator />
-								{selectedEntity ? (
-									<div className="grid grid-cols-3 gap-x-4 items-center px-4 pt-4">
-										<p className="h-9 text-center font-medium text-muted-foreground text-sm">id</p>
-										<p className="h-9 text-center font-medium text-muted-foreground text-sm">int</p>
-										<p className="h-9 text-center font-medium text-muted-foreground text-sm">PK</p>
-									</div>
-								) : (
-									<></>
-								)}
-								<div className="px-4">
+								<div className="p-4">
 									{nodes.map((node: Node) => {
 										if (node.selected) {
-											return node.data.attributes
-												.slice(1)
-												.map((eachAttribute: AttributeType, index: number) => (
+											return node.data.attributes.map(
+												(eachAttribute: AttributeType, index: number) => (
 													<div
 														key={index}
 														className="grid grid-cols-3 gap-x-3 items-center mb-4"
@@ -167,7 +158,9 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 														>
 															<SelectTrigger className="w-full">
 																<SelectValue
-																	defaultValue={eachAttribute.type}
+																	defaultValue={eachAttribute.type
+																		.toString()
+																		.toUpperCase()}
 																	placeholder="Type"
 																/>
 															</SelectTrigger>
@@ -204,7 +197,18 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 															</SelectContent>
 														</Select>
 													</div>
-												));
+												)
+											);
+										} else {
+											return (
+												<div
+													key={"0"}
+													className="w-max mx-auto py-4 flex text-center space-x-3 text-muted-foreground"
+												>
+													<MousePointerClickIcon />
+													<p>Select any Entity.</p>
+												</div>
+											);
 										}
 									})}
 								</div>
