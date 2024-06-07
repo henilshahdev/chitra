@@ -199,16 +199,6 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 													</div>
 												)
 											);
-										} else {
-											return (
-												<div
-													key={"0"}
-													className="w-max mx-auto py-4 flex text-center space-x-3 text-muted-foreground"
-												>
-													<MousePointerClickIcon />
-													<p>Select any Entity.</p>
-												</div>
-											);
 										}
 									})}
 								</div>
