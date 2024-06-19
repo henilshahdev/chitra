@@ -18,6 +18,7 @@ export type AttributeType = {
 export type AppProps = {
 	selectedEntity: EntityDataType | undefined;
 	setSelectedEntity: React.Dispatch<React.SetStateAction<EntityDataType | undefined>>;
+	generateCode?: () => Promise<void>;
 };
 
 export type EntityDataType = {

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Node, useNodes, useOnSelectionChange, useReactFlow } from "reactflow";
-import { AppProps, AttributeType } from "@/types";
+import { AppProps, AttributeType, EntityDataType } from "@/types";
 
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -9,8 +9,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "../ui/separator";
 import { MousePointerClickIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
-const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
+const LeftNav = ({ selectedEntity, setSelectedEntity, generateCode }: AppProps) => {
 	const nodes = useNodes();
 	const { setNodes } = useReactFlow();
 
@@ -206,6 +207,14 @@ const LeftNav = ({ selectedEntity, setSelectedEntity }: AppProps) => {
 						</div>
 					</fieldset>
 				</span>
+				<Button
+					onClick={(e) => {
+						e.preventDefault();
+						generateCode();
+					}}
+				>
+					Gemini
+				</Button>
 			</div>
 		</form>
 	);

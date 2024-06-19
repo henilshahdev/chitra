@@ -12,18 +12,45 @@ import { initialEdges, initialNodes, onBoardingSteps } from "./constants";
 import { useCallback, useState } from "react";
 
 import EntityNode from "./components/CustomRF/EntityNode";
-import { EntityDataType } from "./types/index.ts";
+import { AttributeType, EntityDataType } from "./types/index.ts";
 import ChitraControls from "./components/shared/ChitraControls.tsx";
 import { toast } from "sonner";
 
 import { TourProvider } from "@reactour/tour";
 import { Badge, Close, ContentComponent } from "./components/OnBoarding/index.tsx";
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 const nodeTypes = {
 	entity: EntityNode,
 };
 
 const App = () => {
+	const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
+	const model = genAI.getGenerativeModel({
+		model: "gemini-1.5-flash",
+		systemInstruction:
+			"You're a database expert. You have mastered SQL & NoSQL databases and now you will help me in writing Migrations and Seed Queries. You will only generate code and no explanations around it. JUST CODE. Also, do not format anything, just give me code that I can directly copy paste.",
+	});
+
+	async function run() {
+		let prompt: string[] = [];
+		console.log(nodes.length);
+		nodes.map((eachNode: any) => {
+			prompt.push(
+				`Create table ${eachNode.data.entityName} with the attributes: ${eachNode.data.attributes.map(
+					(eachAttribute: AttributeType) => {
+						return ` ${eachAttribute.name} of type ${eachAttribute.type} with constraint ${eachAttribute.constraint}`;
+					}
+				)}`
+			);
+		});
+		const result = await model.generateContent(prompt);
+		const response = await result.response;
+		const text = response.text();
+		console.log(text);
+	}
+
 	const [selectedEntity, setSelectedEntity] = useState<EntityDataType>({
 		data: initialNodes[0].data,
 		id: initialNodes[0].id,
@@ -120,7 +147,11 @@ const App = () => {
 						<main className="flex-1 flex justify-between items-start lg:space-x-4 overflow-auto p-4">
 							<div className="hidden lg:grid lg:gap-6 min-w-[420px] max-w-[420px]">
 								<ChitraControls addNewEntity={addNewEntity} addNewAttribute={addNewAttribute} />
-								<LeftNav selectedEntity={selectedEntity} setSelectedEntity={setSelectedEntity} />
+								<LeftNav
+									generateCode={run}
+									selectedEntity={selectedEntity}
+									setSelectedEntity={setSelectedEntity}
+								/>
 							</div>
 							<div className="flex flex-col w-full h-[100%]">
 								<div className="md:hidden">
